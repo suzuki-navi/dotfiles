@@ -1,6 +1,6 @@
 
 if [ "$#" == 0 ]; then
-    command="bash"
+    command="python"
 else
     command="$*"
 fi
@@ -19,6 +19,7 @@ work_dirs=$(echo $(cd $HOME; find * -maxdepth 0 -type d | perl -nle 'print "-v $
 if [ $DOTPATH != $HOME/dotfiles ]; then
     work_dirs="$work_dirs -v $DOTPATH:$DOTPATH"
 fi
+work_dirs="$work_dirs -v $HOME/.aws:$HOME/.aws"
 
 envs="-e DOTPATH=$DOTPATH"
 envs="$envs -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY -e NO_PROXY=$NO_PROXY"
