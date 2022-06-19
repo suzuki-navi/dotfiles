@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ls -alF --color --time-style="+%Y-%m-%d %H:%M:%S" "$@" | less -XFR
