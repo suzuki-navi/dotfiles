@@ -1,4 +1,9 @@
 
+# Usage
+# curl 'https://raw.githubusercontent.com/suzuki-navi/dotfiles/main/sync.sh' | bash
+# or
+# bash YOUR_PATH/sync.sh
+
 dotpath=$(dirname $0)
 
 cd $dotpath
@@ -6,12 +11,11 @@ cd $dotpath
 if [ ! -e .dotfiles-home ]; then
     # curl ... | bash のような実行形式の場合
 
-    cd $HOME
-    exit 1 # TODO
-    # 作りかけ
-    #if [ ! -e .dotfiles ]; then
-    #    mkdir .dotfiles
-    #fi
+    if [ ! -e $HOME/.dotfiles ]; then
+        mkdir $HOME/.dotfiles
+        cd $HOME/.dotfiles
+        git clone https://github.com/suzuki-navi/dotfiles.git .
+    fi
 fi
 
 dotpath=$(pwd)
