@@ -4,9 +4,6 @@ if [ -z "$DOTPATH" ]; then
     DOTPATH=$(cd $(dirname $0)/../..; pwd)
 fi
 
-name=$(cd $(dirname $0); basename $(pwd))
-this_docker_path=$DOTPATH/docker/$name
-
 work_dirs=$(echo $(cd $HOME; find * -maxdepth 0 -type d | perl -nle 'print "-v $ENV{HOME}/$_:$ENV{HOME}/$_"'))
 if [ $DOTPATH != $HOME/dotfiles ]; then
     work_dirs="$work_dirs -v $DOTPATH:$DOTPATH"

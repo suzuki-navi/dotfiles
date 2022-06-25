@@ -10,3 +10,5 @@ RUN echo 'Set disable_coredump false' >> /etc/sudo.conf
 
 RUN echo y | sudo unminimize
 
+RUN apt install -y nkf
+
