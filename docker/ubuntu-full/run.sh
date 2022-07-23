@@ -19,5 +19,5 @@ bash $DOTPATH/docker/lib/build.sh $name >&2
 # run_options を定義
 . $DOTPATH/docker/lib/run-options.sh
 
-docker run --rm $run_options dotfiles-$name bash /var/tmp/lib/entrypoint.sh "$command"
+docker run --rm $run_options dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$command"
 

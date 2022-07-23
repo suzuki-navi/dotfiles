@@ -1,4 +1,7 @@
 
+name="$1"
+command="$2"
+
 HOST_UID=${HOST_UID:-0}
 HOST_GID=${HOST_GID:-0}
 HOST_USER=${HOST_USER:-}
@@ -11,5 +14,13 @@ export HOME=/home/$HOST_USER
 
 chown $HOST_USER $HOME
 
-su $HOST_USER -c "$1"
+if [ -e $DOTPATH/docker/$name/entrypoint2.sh ]; then
+    sudo $HOST_USER -c "bash $DOTPATH/docker/$name/entrypoint2.sh"
+fi
+
+if [ -t 1 ]; then
+    su -P $HOST_USER -c "$command"
+else
+    su $HOST_USER -c "$command"
+fi
 

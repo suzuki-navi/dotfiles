@@ -21,5 +21,5 @@ bash $DOTPATH/docker/lib/build.sh $name >&2
 
 run_options="$run_options -v $HOME/.aws:$HOME/.aws"
 
-docker run --rm $run_options dotfiles-$name bash /var/tmp/lib/entrypoint.sh "$command"
+docker run --rm $run_options dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$command"
 

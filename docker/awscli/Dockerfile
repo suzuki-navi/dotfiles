@@ -23,5 +23,3 @@ COPY --from=installer /aws-cli-bin/ /usr/local/bin/
 
 COPY var/lib /var/tmp/lib
 
-#ENTRYPOINT ["/usr/local/bin/aws"]
-
