@@ -1,26 +1,25 @@
 
+set -Ceu
+
+if [ "$#" == 0 ]; then
+    command="aws"
+else
+    command="$*"
+fi
+
 DOTPATH=${DOTPATH:-}
 if [ -z "$DOTPATH" ]; then
     DOTPATH=$(cd $(dirname $0)/../..; pwd)
 fi
 
-work_dirs=$(echo $(cd $HOME; find * -maxdepth 0 -type d | perl -nle 'print "-v $ENV{HOME}/$_:$ENV{HOME}/$_"'))
-if [ $DOTPATH != $HOME/dotfiles ]; then
-    work_dirs="$work_dirs -v $DOTPATH:$DOTPATH"
-fi
-work_dirs="$work_dirs -v $HOME/.aws:$HOME/.aws"
+name=$(cd $(dirname $0); basename $(pwd))
 
-envs="$envs -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY -e NO_PROXY=$NO_PROXY"
-envs="$envs -e HOME=$HOME"
+bash $DOTPATH/docker/lib/build.sh $name >&2
 
-user=$(whoami)
-uid=$(id -u $user)
-gid=$(id -g $user)
-if [ -t 0 ]; then
-    term_opt="-it"
-else
-    term_opt=""
-fi
+# run_options を定義
+. $DOTPATH/docker/lib/run-options.sh
 
-docker run $term_opt --rm -w "$(pwd)" $envs $work_dirs -u $uid:$gid amazon/aws-cli "$@"
+run_options="$run_options -v $HOME/.aws:$HOME/.aws"
+
+docker run --rm $run_options dotfiles-$name bash /var/tmp/lib/entrypoint.sh "$command"
 

@@ -13,7 +13,9 @@ if [ $DOTPATH != $HOME/dotfiles ]; then
     work_dirs="$work_dirs -v $DOTPATH:$DOTPATH"
 fi
 
-envs="-e DOTPATH=$DOTPATH"
+envs=""
+envs="$envs -e HOME=$HOME"
+envs="$envs -e DOTPATH=$DOTPATH"
 if [ -v HTTP_PROXY ]; then
     envs="$envs -e HTTP_PROXY=$HTTP_PROXY"
 fi
