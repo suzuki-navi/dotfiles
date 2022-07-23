@@ -1,4 +1,6 @@
 
+set -Ceu
+
 if [ "$#" == 0 ]; then
     command="bash"
 else
@@ -11,25 +13,11 @@ if [ -z "$DOTPATH" ]; then
 fi
 
 name=$(cd $(dirname $0); basename $(pwd))
-this_docker_path=$DOTPATH/docker/$name
 
-bash $this_docker_path/build.sh >&2
+bash $DOTPATH/docker/lib/build.sh $name >&2
 
-work_dirs=$(echo $(cd $HOME; find * -maxdepth 0 -type d | perl -nle 'print "-v $ENV{HOME}/$_:$ENV{HOME}/$_"'))
-if [ $DOTPATH != $HOME/dotfiles ]; then
-    work_dirs="$work_dirs -v $DOTPATH:$DOTPATH"
-fi
+# run_options を定義
+. $DOTPATH/docker/lib/run-options.sh
 
-envs="-e DOTPATH=$DOTPATH"
-envs="$envs -e HTTP_PROXY=$HTTP_PROXY -e HTTPS_PROXY=$HTTPS_PROXY -e NO_PROXY=$NO_PROXY"
-
-user=$(whoami)
-uid=$(id -u $user)
-gid=$(id -g $user)
-if [ -t 0 ]; then
-    term_opt="-it"
-else
-    term_opt=""
-fi
-docker run $term_opt --rm -e HOST_UID=$uid -e HOST_GID=$gid -e HOST_USER=$user -w "$(pwd)" $envs $work_dirs dotfiles-$name bash $this_docker_path/entrypoint.sh "$command"
+docker run --rm $run_options dotfiles-$name bash /var/tmp/lib/entrypoint.sh "$command"
 

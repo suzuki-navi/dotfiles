@@ -12,3 +12,5 @@ RUN echo y | sudo unminimize
 
 RUN apt install -y nkf
 
+COPY var/lib /var/tmp/lib
+
