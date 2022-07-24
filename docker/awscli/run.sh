@@ -19,7 +19,8 @@ bash $DOTPATH/docker/lib/build.sh $name >&2
 # run_options を定義
 . $DOTPATH/docker/lib/run-options.sh
 
-run_options="$run_options -v $HOME/.aws:$HOME/.aws"
+work_dirs=$(perl $DOTPATH/docker/lib/mount-point-options.pl $DOTPATH $(cd $HOME; ls -a .) -v .aws)
+work_dirs="$work_dirs -v $HOME/.aws:$HOME/.aws"
 
 docker run --rm $run_options dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$command"
 
