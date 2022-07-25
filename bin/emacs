@@ -5,7 +5,5 @@ if [ -z "$DOTPATH" ]; then
     DOTPATH=$(cd $(dirname $0)/..; pwd)
 fi
 
-name=$(basename $0)
-
-bash $DOTPATH/docker/workenv/run.sh $name "$@"
+bash $DOTPATH/docker/emacs/run.sh
 

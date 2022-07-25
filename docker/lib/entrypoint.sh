@@ -15,7 +15,11 @@ export HOME=/home/$HOST_USER
 chown $HOST_USER $HOME
 
 if [ -e $DOTPATH/docker/$name/entrypoint2.sh ]; then
-    su $HOST_USER -c "bash $DOTPATH/docker/$name/entrypoint2.sh"
+    bash $DOTPATH/docker/$name/entrypoint2.sh
+fi
+
+if [ -e $DOTPATH/docker/$name/entrypoint3.sh ]; then
+    su $HOST_USER -c "bash $DOTPATH/docker/$name/entrypoint3.sh"
 fi
 
 if [ -t 1 ]; then

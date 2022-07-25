@@ -1,0 +1,14 @@
+#!/bin/bash
+
+DOTPATH=${DOTPATH:-}
+if [ -z "$DOTPATH" ]; then
+    DOTPATH=$(cd $(dirname $0)/..; pwd)
+fi
+
+if [ -v TMUX ]; then
+    echo 'sessions should be nested with care, unset $TMUX to force' >&2
+    exit 1
+fi
+
+bash $DOTPATH/docker/workenv/run.sh tmux
+

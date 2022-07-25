@@ -7,5 +7,5 @@ fi
 
 name=$(basename $0)
 
-bash $DOTPATH/docker/workenv/run.sh $name "$@"
+bash $DOTPATH/docker/pythonlib/run.sh $name "$@"
 
