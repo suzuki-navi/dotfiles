@@ -2,7 +2,6 @@
 set -Ceu
 
 if [ "$#" == 0 ]; then
-    #command="$DOTPATH/docker/workenv/shell.sh"
     command="zsh"
 else
     command="$*"

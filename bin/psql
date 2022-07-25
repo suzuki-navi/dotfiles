@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DOTPATH=${DOTPATH:-}
+if [ -z "$DOTPATH" ]; then
+    DOTPATH=$(cd $(dirname $0)/..; pwd)
+fi
+
+name=$(basename $0)
+
+export PAGER='less -SRXF'
+
+bash $DOTPATH/docker/psql/run.sh $name "$@"
+
