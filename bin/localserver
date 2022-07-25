@@ -1,0 +1,11 @@
+#!/bin/bash
+
+DOTPATH=${DOTPATH:-}
+if [ -z "$DOTPATH" ]; then
+    DOTPATH=$(cd $(dirname $0)/..; pwd)
+fi
+
+bash $DOTPATH/docker/python-full/run.sh python $DOTPATH/docker/python-full/lib/localserver.py "$@"
+
+# TODO ポートを開ける必要がある
+
