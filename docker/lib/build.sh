@@ -1,11 +1,13 @@
 
+set -Ceu
+
 name=$1
 
 cd $(dirname $0)/../$name
 
 mkdir -p var
 
-cat $(find $(ls | grep -v var) -type f) $(find ../lib -type f) | sha1sum | cut -b-40 > var/hash.1
+cat $(find $(ls | grep -v var) -type f) $(find ../lib -type f) | sha1sum | cut -b-40 >| var/hash.1
 
 if [ ! -e var/hash ]; then
     touch var/hash
