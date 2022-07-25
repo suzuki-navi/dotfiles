@@ -2,9 +2,7 @@
 set -Ceu
 
 if [ "$#" == 0 ]; then
-    command="emacs"
-else
-    command="$*"
+    exec $0 emacs
 fi
 
 DOTPATH=${DOTPATH:-}
@@ -24,5 +22,5 @@ work_dirs=$(perl $DOTPATH/docker/lib/mount-point-options.pl $DOTPATH $(cd $HOME;
 work_dirs="$work_dirs -v $DOTPATH/.emacs:$HOME/.emacs"
 work_dirs="$work_dirs -v $DOTPATH/.emacs.d:$HOME/.emacs.d"
 
-docker --config $DOTPATH/.docker/ run --rm $run_options $work_dirs dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$command"
+docker --config $DOTPATH/.docker/ run --rm $run_options $work_dirs dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$@"
 

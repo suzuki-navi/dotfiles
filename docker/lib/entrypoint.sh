@@ -1,6 +1,15 @@
 
+sh-escape() {
+  local s a=() q="'" qq='"'
+  for s in "$@"; do
+    a+=("'${s//$q/$q$qq$q$qq$q}'")
+  done
+  echo "${a[*]}"
+}
+
 name="$1"
-command="$2"
+shift
+command="$(sh-escape "$@")"
 
 HOST_UID=${HOST_UID:-0}
 HOST_GID=${HOST_GID:-0}

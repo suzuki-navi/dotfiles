@@ -2,9 +2,7 @@
 set -Ceu
 
 if [ "$#" == 0 ]; then
-    command="nodejs"
-else
-    command="$*"
+    exec $0 nodejs
 fi
 
 DOTPATH=${DOTPATH:-}
@@ -21,5 +19,5 @@ bash $DOTPATH/docker/lib/build.sh $name >&2
 
 work_dirs=$(perl $DOTPATH/docker/lib/mount-point-options.pl $DOTPATH $(cd $HOME; ls .))
 
-docker --config $DOTPATH/.docker/ run --rm $run_options $work_dirs dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$command"
+docker --config $DOTPATH/.docker/ run --rm $run_options $work_dirs dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$@"
 

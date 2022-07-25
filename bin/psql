@@ -7,7 +7,7 @@ fi
 
 name=$(basename $0)
 
-export PAGER='less -SRXF'
+export PAGER="less -SRXF"
 
 bash $DOTPATH/docker/psql/run.sh $name "$@"
 

@@ -5,5 +5,5 @@ if [ -z "$DOTPATH" ]; then
     DOTPATH=$(cd $(dirname $0)/..; pwd)
 fi
 
-bash $DOTPATH/docker/emacs/run.sh
+bash $DOTPATH/docker/emacs/run.sh emacs
 

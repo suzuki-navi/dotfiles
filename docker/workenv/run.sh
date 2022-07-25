@@ -2,9 +2,7 @@
 set -Ceu
 
 if [ "$#" == 0 ]; then
-    command="zsh"
-else
-    command="$*"
+    exec $0 zsh
 fi
 
 DOTPATH=${DOTPATH:-}
@@ -13,23 +11,6 @@ if [ -z "$DOTPATH" ]; then
 fi
 
 name=$(cd $(dirname $0); basename $(pwd))
-
-if [ ! -e $DOTPATH/var/.zsh_history ]; then
-    if [ -e $DOTPATH/private/.zsh_history ]; then
-        cp $DOTPATH/private/.zsh_history $DOTPATH/var/.zsh_history
-    else
-        touch $DOTPATH/var/.zsh_history
-    fi
-fi
-
-if [ ! -e $DOTPATH/var/.zshenv-local ]; then
-    echo "export PATH=$DOTPATH/bin:\$PATH" >> $DOTPATH/var/.zshenv-local
-fi
-
-if [ ! -e $DOTPATH/var/.ssh/known_hosts ]; then
-    mkdir -p $DOTPATH/var/.ssh
-    touch $DOTPATH/var/.ssh/known_hosts
-fi
 
 bash $DOTPATH/docker/lib/build.sh $name >&2
 
@@ -55,5 +36,22 @@ if [ -e $DOTPATH/private/.gitconfig ]; then
     work_dirs="$work_dirs -v $DOTPATH/private/.gitconfig:$HOME/.gitconfig"
 fi
 
-docker --config $DOTPATH/.docker/ run --rm $run_options $work_dirs dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$command"
+if [ ! -e $DOTPATH/var/.zsh_history ]; then
+    if [ -e $DOTPATH/private/.zsh_history ]; then
+        cp $DOTPATH/private/.zsh_history $DOTPATH/var/.zsh_history
+    else
+        touch $DOTPATH/var/.zsh_history
+    fi
+fi
+
+rm -rf $DOTPATH/var/.zshenv-local
+echo "export PATH=$DOTPATH/bin:\$PATH" >> $DOTPATH/var/.zshenv-local
+echo "export PATH=$DOTPATH/private/bin:\$PATH" >> $DOTPATH/var/.zshenv-local
+
+if [ ! -e $DOTPATH/var/.ssh/known_hosts ]; then
+    mkdir -p $DOTPATH/var/.ssh
+    touch $DOTPATH/var/.ssh/known_hosts
+fi
+
+docker --config $DOTPATH/.docker/ run --rm $run_options $work_dirs dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$@"
 

@@ -75,6 +75,7 @@ if [ ! -e $DOTPATH/private ]; then
 fi
 
 copy_history_to_repo $DOTPATH/var/.zsh_history $DOTPATH/private/.zsh_history
+copy_history_to_repo $DOTPATH/var/.psql_history $DOTPATH/private/.psql_history
 
 if [ -e $DOTPATH/private/.git ]; then (
   # autocommit
@@ -83,4 +84,5 @@ if [ -e $DOTPATH/private/.git ]; then (
 ); fi
 
 copy_history_from_repo $DOTPATH/private/.zsh_history $DOTPATH/var/.zsh_history
+copy_history_from_repo $DOTPATH/private/.psql_history $DOTPATH/var/.psql_history
 
