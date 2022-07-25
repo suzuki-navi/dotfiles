@@ -1,0 +1,86 @@
+#!/usr/bin/bash
+
+set -Ceu
+
+DOTPATH=${DOTPATH:-}
+if [ -z "$DOTPATH" ]; then
+    DOTPATH=$(cd $(dirname $0)/..; pwd)
+fi
+
+function copy_history_from_repo() {
+    local src="$1"
+    local dst="$2"
+    echo $src -\> $dst
+    [ ! -e $src ] && return
+    mkdir -p $(dirname "$dst")
+    (
+        cat $src
+        if [ -e $dst ]; then
+          diff -u $src $dst | grep -a -e '^+' | grep -a -v -e '^+++' | cut -b2-
+        fi
+    ) >| $dst.merged
+    mv $dst.merged $dst
+}
+
+function copy_history_to_repo() {
+    local src="$1"
+    local dst="$2"
+    [ ! -e $src ] && return
+    [ ! -e $dst ] && return
+    echo $src -\> $dst
+    mkdir -p $(dirname "$dst")
+    (
+      cat $dst
+      diff -u $dst $src | grep -a -e '^+' | grep -a -v -e '^+++' | cut -b2-
+    ) >| $dst.merged
+    mv $dst.merged $dst
+}
+
+function copy_known_hosts_from_repo() {
+    local src="$1"
+    local dst="$2"
+    echo $src -\> $dst
+    mkdir -p $(dirname "$dst")
+    cat $src $dst | perl -e '
+        my @arr = ();
+        while (my $line = <STDIN>) {
+            unless (grep {$_ eq $line} @arr) {
+                print $line;
+                push(@arr, $line);
+            }
+        }
+    ' >| $dst.merged
+    mv $dst.merged $dst
+}
+
+function copy_known_hosts_to_repo() {
+    local src="$1"
+    local dst="$2"
+    echo $src -\> $dst
+    mkdir -p $(dirname "$dst")
+    cat $dst $src | perl -e '
+        my @arr = ();
+        while (my $line = <STDIN>) {
+            unless (grep {$_ eq $line} @arr) {
+                print $line;
+                push(@arr, $line);
+            }
+        }
+    ' >| $dst.merged
+    mv $dst.merged $dst
+}
+
+if [ ! -e $DOTPATH/private ]; then
+    exit
+fi
+
+copy_history_to_repo $DOTPATH/var/.zsh_history $DOTPATH/private/.zsh_history
+
+if [ -e $DOTPATH/private/.git ]; then (
+  # autocommit
+  cd $DOTPATH/private
+  bash $DOTPATH/lib/autocommit.sh "autocommit history $(hostname)"
+); fi
+
+copy_history_from_repo $DOTPATH/private/.zsh_history $DOTPATH/var/.zsh_history
+
