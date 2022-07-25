@@ -21,7 +21,8 @@ bash $DOTPATH/docker/lib/build.sh $name >&2
 
 work_dirs=$(perl $DOTPATH/docker/lib/mount-point-options.pl $DOTPATH $(cd $HOME; ls .))
 
-work_dirs="$work_dirs -v $HOME/.aws:$HOME/.aws"
+work_dirs="$work_dirs -v $DOTPATH/credentials/.aws/credentials:$HOME/.aws/credentials"
+work_dirs="$work_dirs -v $DOTPATH/credentials/.aws/config:$HOME/.aws/config"
 
 docker --config $DOTPATH/.docker/ run --rm $run_options $work_dirs dotfiles-$name bash /var/tmp/lib/entrypoint.sh $name "$command"
 
