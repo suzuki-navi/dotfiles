@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -Ceu
+
+DOTPATH=${DOTPATH:-}
+if [ -z "$DOTPATH" ]; then
+    DOTPATH=$(cd $(dirname $0)/..; pwd)
+fi
+
+if [ -e $DOTPATH/archive ]; then (
+    cd $DOTPATH/archive
+    ls | perl -nle '/^(.+)\.tar\.gz\.[0-9]+$/ and print $1'
+) fi | LC_ALL=C sort | LC_ALL=C uniq | while read name; do
+    if [ -e $HOME/$name ]; then
+        echo '################################################################################'
+        echo "# $name"
+        echo "# $(date '+%Y-%m-%d %H:%M:%S')"
+        bash $DOTPATH/bin/push-s3dir $name
+    fi
+done
+
+echo '################################################################################'
+echo "# $(date '+%Y-%m-%d %H:%M:%S')"
+echo '################################################################################'
+

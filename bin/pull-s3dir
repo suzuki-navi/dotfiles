@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -Ceu
+
+DOTPATH=${DOTPATH:-}
+if [ -z "$DOTPATH" ]; then
+    DOTPATH=$(cd $(dirname $0)/..; pwd)
+fi
+
+while [ "$#" != 0 ]; do
+    bash $DOTPATH/lib/pull-s3dir.sh $1
+    shift
+done
+

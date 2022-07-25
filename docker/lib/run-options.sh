@@ -2,7 +2,7 @@
 user=$(whoami)
 uid=$(id -u $user)
 gid=$(id -g $user)
-if [ -t 0 ]; then
+if [ -t 0 ] && [ -t 1 ]; then
     term_opt="-it"
 else
     term_opt=""
